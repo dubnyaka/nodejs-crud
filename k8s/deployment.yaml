@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "nodejs_crud"
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-crud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-crud
+  template:
+    metadata:
+      labels:
+        app: nodejs-crud
+    spec:
+      containers:
+        - name: nodejs-crud
+          image: nodejs-crud:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: app-config
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: DATABASE_HOST
+              value: "db"
+            - name: DATABASE_USER
+              value: "postgres"
+            - name: DATABASE_PASSWORD
+              value: "postgres"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_NAME
+              value: "nodejs_crud"
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: "/app/gcp-key.json"
+          volumeMounts:
+            - name: gcp-key-volume
+              mountPath: "/app/gcp-key.json"
+              subPath: gcp-key.json
+      volumes:
+        - name: gcp-key-volume
+          secret:
+            secretName: gcp-key-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-crud-service
+spec:
+  selector:
+    app: nodejs-crud
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: NodePort

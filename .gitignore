@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.env.docker
+.idea
+/logs/
+/package-lock.json
+/gcp-key.json
+/temp/

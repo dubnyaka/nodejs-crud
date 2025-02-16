@@ -1,0 +1,34 @@
+[
+  {
+    "title": "1984",
+    "genre": "Dystopian",
+    "description": "A novel about totalitarianism and surveillance.",
+    "pages": 328,
+    "year": 1949,
+    "author_name": "George Orwell"
+  },
+  {
+    "title": "Animal Farm",
+    "genre": "Political Satire",
+    "description": "A satirical allegory of Soviet totalitarianism.",
+    "pages": 176,
+    "year": 1945,
+    "author_name": "George Orwell"
+  },
+  {
+    "title": "Brave New World",
+    "genre": "Science Fiction",
+    "description": "A novel that explores a futuristic society.",
+    "pages": 268,
+    "year": 1932,
+    "author_name": "Aldous Huxley"
+  },
+  {
+    "title": "Harry Potter and the Philosopher's Stone",
+    "genre": "Fantasy",
+    "description": "A young wizard's journey begins.",
+    "pages": 309,
+    "year": 1997,
+    "author_name": "J.K. Rowling"
+  }
+]
