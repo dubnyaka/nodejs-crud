@@ -7,7 +7,6 @@ This project is a Node.js CRUD API with a PostgreSQL database. This file describ
 ### Install Dependencies
 Before starting, make sure you have installed:
 - **[Minikube](https://minikube.sigs.k8s.io/docs/start/)**
-- **[Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)**
 - **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**
 
 ### Start Minikube
